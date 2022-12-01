@@ -3,7 +3,6 @@ calorie_list = f.readlines()
 
   
 def most_calories(calorie_list, carrier_count):
-    max_cal = 0
     cur_cal = 0
     elf_cals = []
 
@@ -14,9 +13,6 @@ def most_calories(calorie_list, carrier_count):
             except:
                 print("Invalid input")
         else:
-            if cur_cal > max_cal:
-                max_cal = cur_cal
-            
             elf_cals.append(cur_cal)
             cur_cal = 0
     
