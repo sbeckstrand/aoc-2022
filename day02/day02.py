@@ -44,8 +44,7 @@ def follow_guide(guide, input_type):
             score += point_con[hands[1]]
 
         elif input_type == "condition":
-            print(hands)
-            print(point_con[tie_con[hands[0]]])
+
             # For Tie
             if hands[1] == "Y":
                 score += point_con[tie_con[hands[0]]]
@@ -56,6 +55,7 @@ def follow_guide(guide, input_type):
                 score += point_con[win_con[hands[0]]]
                 score += 6
 
+            # For Loss
             else:
                 score += point_con[lose_con[hands[0]]]
             
