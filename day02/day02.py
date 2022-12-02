@@ -59,9 +59,6 @@ def follow_guide(guide, input_type):
             else:
                 score += point_con[lose_con[hands[0]]]
             
-            
-
-        
     return score
 
 print(follow_guide(guide, "hand"))
