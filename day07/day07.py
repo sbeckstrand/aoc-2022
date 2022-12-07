@@ -2,12 +2,14 @@ input = open("input.txt", "r")
 commands = input.read().splitlines()
 input.close()
 
+# Class for tracking File object types
 class SystemFile:
     def __init__(self, parent, name, size):
         self.name = name
         self.size = size
         self.parent= parent
 
+# Class for tracking Directory object types
 class Dir:
     def __init__(self, parent, name):
         self.name = name
@@ -16,6 +18,7 @@ class Dir:
         self.children = []
         self.files = []
 
+    # Function to check if a child directory already exists, if so, retrieve it
     def get_child(self, name):
         result_child = None
         for child in self.children:
@@ -24,6 +27,7 @@ class Dir:
         
         return result_child
     
+    # Function to check if a file already exists, if so, retrieve it
     def get_file(self, name):
         result_file = None
         for file in self.files:
@@ -32,6 +36,8 @@ class Dir:
 
         return result_file
 
+# Recursive function to set size of directories based on child directories 
+# and to calculate size of directories under the specified max size
 def calc_size(dir, record_size, max_size):
     updated_record_size = record_size
     if len(dir.children) > 0:
@@ -48,6 +54,8 @@ def calc_size(dir, record_size, max_size):
 
     return dir.size, updated_record_size
 
+# Recursive function to find the smallest file that can be deleted 
+# and meet the requirement for the amount of space needed to free up
 def del_smallest_needed(dir, del_size):
     smallest_needed = dir
     if len(dir.children) > 0:
@@ -59,7 +67,7 @@ def del_smallest_needed(dir, del_size):
                 
     return smallest_needed
     
-
+# Takes a series of command line input and builds the tree of directories and files. 
 def build_dir_map(commands, max_size=100000, del_files=False):
     root_dir = None
     curr_dir = None
@@ -83,13 +91,14 @@ def build_dir_map(commands, max_size=100000, del_files=False):
                     curr_dir.children.append(child_dir)
                 curr_dir = child_dir
             
-        
+        # If command starts with dir, create the directory under current directory if it doesnt already exist
         elif line.startswith("dir"):
             dir_name = line.split(" ")[1]
             if curr_dir.get_child(dir_name) == None:
                 child = Dir(curr_dir, dir_name)
                 curr_dir.children.append(child)
 
+        # Check if a file, if so, create it under current directory if it doesnt already exist. 
         elif line[0].isdigit():
             file_props = line.split(" ")
             file_name, file_size = file_props[1], int(file_props[0])
