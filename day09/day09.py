@@ -2,9 +2,12 @@ input = open("input.txt", "r")
 rope_movement = input.read().splitlines()
 input.close()
 
-def track_rope(rope_movement):
-    head = [0, 0]
-    tail = [0, 0]
+
+def track_rope(rope_movement, knots_num=2):
+    knots = []
+    for knot in range (0, knots_num):
+        knots.append([0, 0])
+    
     tail_tracked = []
     # Get the direction and number of steps to take
     for line in rope_movement:
@@ -13,20 +16,22 @@ def track_rope(rope_movement):
         for step in range(0, steps):
             match direction:
                 case "U":
-                    head[1] = head[1] + 1
+                    knots[0][1] = knots[0][1] + 1
                 case "D":
-                    head[1] = head[1] - 1
+                    knots[0][1] = knots[0][1] - 1
                 case "L":
-                    head[0] = head[0] - 1
+                    knots[0][0] = knots[0][0] - 1
                 case "R":
-                    head[0] = head[0] + 1
+                    knots[0][0] = knots[0][0] + 1
 
             # After head has been moved, check if tail needs to be moved.
-            tail = move_tail(head, tail)
+            for knot_idx in range (1, len(knots)):
+                knots[knot_idx] = move_tail(knots[knot_idx - 1], knots[knot_idx])
+
             # After tail has been potentially moved, check if its current place has already been tracked. If not, add it
-            if str(tail) not in tail_tracked:
-                tail_tracked.append(str(tail))
-            
+            if str(knots[-1]) not in tail_tracked:
+                print( knots[-1])
+                tail_tracked.append(str(knots[-1]))
     return len(tail_tracked)
 
 # Function tails the head and tail positions as input and checks if tail needs to be moved.
@@ -53,3 +58,4 @@ def move_tail(head, tail):
     return new_tail
 
 print(track_rope(rope_movement))
+print(track_rope(rope_movement, 10))
